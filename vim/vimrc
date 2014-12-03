@@ -1,0 +1,312 @@
+set nocompatible
+
+if has('win32') || has('win64')
+  set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+endif
+
+"Setup Bundle Support{
+set rtp+=~/.dotfiles/vim/bundle/Vundle.vim/
+call vundle#begin()
+"}
+
+"Bundles {
+"Core
+Bundle 'gmarik/Vundle.vim'
+
+"Color
+Bundle 'fholgado/Molokai2'
+Bundle 'shelling/railscasts.vim'
+Bundle 'vim-scripts/Color-Sampler-Pack'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'wgibbs/vim-irblack'
+Bundle 'telamon/vim-color-github'
+Bundle 'TechnoGate/janus-colors'
+Bundle 'nelstrom/vim-blackboard'
+
+"Lang
+Bundle 'pangloss/vim-javascript'
+Bundle 'tpope/vim-markdown'
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'tpope/vim-rails'
+Bundle 'cakebaker/scss-syntax.vim'
+Bundle 'mmalecki/vim-node.js'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'vim-scripts/Arduino-syntax-file'
+
+"Tool
+Bundle 'scrooloose/nerdtree'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'vim-scripts/bufexplorer.zip'
+Bundle 'edsono/vim-matchit'
+Bundle 'mileszs/ack.vim'
+Bundle 'tpope/vim-fugitive'
+Bundle 'tpope/vim-surround'
+Bundle 'garbas/vim-snipmate'
+Bundle 'tomtom/tlib_vim'
+Bundle 'MarcWeber/vim-addon-mw-utils'
+Bundle 'honza/vim-snippets'
+Bundle 'scrooloose/syntastic'
+Bundle 'majutsushi/tagbar'
+Bundle 'michaeljsmith/vim-indent-object'
+Bundle 'tpope/vim-endwise'
+Bundle 'ap/vim-css-color'
+Bundle 'kien/ctrlp.vim'
+Bundle 'mattn/emmet-vim'
+Bundle 'vim-scripts/XML-Completion'
+Bundle 'itspriddle/vim-jquery'
+Bundle 'hail2u/vim-css3-syntax'
+Bundle 'othree/html5.vim'
+Bundle 'vim-scripts/jsbeautify'
+Bundle 'vim-scripts/txt.vim--xu'
+Bundle 'vim-scripts/AutoComplPop'
+Bundle 'jiangmiao/auto-pairs'
+"}
+
+"{ TEST
+Bundle 'thoughtbot/vim-rspec'
+"}
+
+call vundle#end()  "required
+
+"Color theme
+set background=dark
+colorscheme railscasts "solarized
+"Automatically detect file types
+filetype plugin indent on
+"syntax highlighting
+syntax on
+"enable mouse usage
+set mouse=a
+scriptencoding utf-8
+"abbrev. of messages (avoids 'hit enter')
+set shortmess+=filmnrxoOtT
+" better unix / windows compatibility
+set viewoptions=folds,options,cursor,unix,slash
+"allow for cursor beyond last character
+set virtualedit=onemore
+
+" Vim UI {
+"color solarized                 " load a colorscheme
+"let g:solarized_termtrans=1
+"let g:solarized_termcolors=256
+"let g:solarized_contrast="high"
+"let g:solarized_visibility="high"
+
+"display the current mode
+set showmode
+"highlight current line
+set cursorline
+
+if has('cmdline_info')
+  set ruler                   " show the ruler
+  set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " a ruler on steroids
+  set showcmd                 " show partial commands in status line and
+  " selected characters/lines in visual mode
+endif
+
+if has('statusline')
+  set laststatus=2
+
+  " Broken down into easily includeable segments
+  set statusline=%<%f\    " Filename
+  set statusline+=%w%h%m%r " Options
+  set statusline+=%{fugitive#statusline()} "  Git Hotness
+  set statusline+=\ [%{&ff}/%Y]            " filetype
+  set statusline+=\ [%{getcwd()}]          " current dir
+  set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
+endif
+
+"set dictionary+=/usr/local/share/dict/words
+set backspace=indent,eol,start  " backspace for dummies
+set linespace=0                 " No extra spaces between rows
+set number                          " Line numbers on
+set showmatch                   " show matching brackets/parenthesis
+set incsearch                   " find as you type search
+set hlsearch                    " highlight search terms
+set winminheight=0              " windows can be 0 line high
+set ignorecase                  " case insensitive search
+set smartcase                   " case sensitive when uc present
+set wildmenu                    " show list instead of just completing
+set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all.
+set whichwrap=b,s,h,l,<,>,[,]   " backspace and cursor keys wrap to
+set scrolljump=5                " lines to scroll when cursor leaves screen
+set scrolloff=3                 " minimum lines to keep above and below cursor
+set foldmethod=manual             "set manual fold
+set nobackup                    "don't create backup file
+set noswapfile                  "set no swap file
+set fileformat=unix             "set file format
+set shortmess=atI               "set don't show the hint at startup
+set list
+set listchars=tab:,.,trail:.,extends:#,nbsp:. " Highlight problematic whitespace
+" }
+
+" Formatting {
+set nowrap                      " do not wrap long lines
+set autoindent                  " indent at the same level of the previous line
+set shiftwidth=2                " use indents of 2 spaces
+set expandtab                   " tabs are spaces, not tabs
+set tabstop=2                   " an indentation every four columns
+set softtabstop=2               " let backspace delete indent
+"set matchpairs+=<:>                " match, to be used with %
+set pastetoggle=<F12>           " pastetoggle (sane indentation on pastes)
+"set comments=sl:/*,mb:*,elx:*/  " auto format comment blocks
+" Remove trailing whitespaces and ^M chars
+autocmd FileType c,cpp,java,php,js,python,twig,xml,yml autocmd BufWritePre <buffer> :call setline(1,map(getline(1,"$"),'substitute(v:val,"\\s\\+$","","")'))
+" }
+" Key (re)Mappings {
+
+"The default leader is '\', but many people prefer ',' as it's in a standard
+"location
+let mapleader = ','
+" Textmate alt-p & alt+l {{{
+inoremap <M-p> params[:]<left>
+inoremap <M-j> session[:]<left>
+inoremap <M-l> <space>=><space>
+inoremap <M->> <%=<space><space>%><left><left><left>
+" shift+alt+l  select the line
+inoremap <M-L> <C-O><home>v<S-end>
+nnoremap <M-L> <home>v<S-end>
+" shift+alt+k delete the line
+inoremap <M-K> <C-O><home>v<S-end><del>
+nnoremap <M-K> <home>v<s-end><del>
+" ctrl + c,a,v,x,z
+"nnoremap <BS> d
+" ctrl + a
+noremap <C-A> ggVG
+inoremap <C-A> <C-O>ggVG
+" ctrl + s
+imap <C-s> <esc>:w<CR>:echo expand("%f") . " saved."<CR>
+vmap <C-s> <esc>:w<CR>:echo expand("%f") . " saved."<CR>
+nmap <C-s> :w<CR>:echo expand("%f") . " saved."<CR>
+" ctrl + c
+vmap <C-c> "+y
+" ctrl + x
+"vmap <C-x> "+x
+" ctrl + z
+inoremap <C-z> <C-O>u
+nnoremap <C-z> u
+" ctrl + v
+"nnoremap <C-v> "+gP
+"inoremap <C-v> <C-O>"+gP
+" ctrl + o
+"imap <C-o> <C-O>:e
+"vmap <C-o> <esc>:e
+"nmap <C-o> :e 
+"}}}
+
+
+" Making it so ; works like : for commands. Saves typing and eliminates :W style typos due to lazy holding shift.
+nnoremap ; :
+
+" Easier moving in tabs and windows
+map <C-H> <C-W>h<C-W>
+map <C-J> <C-W>j<C-W>_
+map <C-K> <C-W>k<C-W>_
+map <C-L> <C-W>l<C-W>
+
+" ctrlp {
+let g:ctrlp_map = '<C-p>'
+let g:ctrlp_working_path_mode = 'ra'
+"let g:ctrlp_regexp = 1
+let g:ctrlp_root_markers = ['.git','Gemfile','.vimrc','.bashrc', '.zshrc']
+nnoremap <silent> <D-t> :CtrlP<CR>
+nnoremap <silent> <D-r> :CtrlPMRU<CR>
+
+set wildignore+=*/tmp/*,*.so*,*.swp,*.zip,._* "MacOSX or Linux
+"set wildignore+=tmp\*,*.swp,*.zip,*.exe
+let g:ctrlp_custom_ignore = {
+      \ 'dir':  '\.git$\|\.hg$\|\.svn$',
+      \ 'file': '\.exe$\|\.so$\|\.dll$|\._*' }
+"}
+
+" TagBar {
+nnoremap <silent> <leader>tt :TagbarToggle<CR>
+"}                 map <C-L> <C-W>l<C-W>_
+map <C-H> <C-W>h<C-W>_
+
+
+" Fugitive {
+nnoremap <silent> <leader>gs :Gstatus<CR>
+nnoremap <silent> <leader>gd :Gdiff<CR>
+nnoremap <silent> <leader>gc :Gcommit<CR>
+nnoremap <silent> <leader>gb :Gblame<CR>
+nnoremap <silent> <leader>gl :Glog<CR>
+nnoremap <silent> <leader>gp :Git push<CR>
+"}
+
+
+" NERD Commenter {
+let NERDSpaceDelims = 1
+map <D-/> <Plug>NERDCommenterToggle
+imap <D-/> <C-O><Plug>NERDCommenterToggle
+" }
+
+"jquery {
+au BufRead,BufNewFile *.js set syntax=jquery
+"}
+
+"ZenCoding settings {
+if has('gui_running')
+  let g:user_emmet_expandabbr_key = '<leader>e'
+else
+let g:user_emmet_expandabbr_key = '<C-o>'
+endif
+let g:user_emmet_mode='a'
+let g:user_emmet_install_global = 0
+autocmd FileType html,css,eruby EmmetInstall
+"}
+
+" GUI Settings {
+" GVIM- (here instead of .gvimrc)
+if has('gui_running')
+  set guioptions-=T           " remove the toolbar
+  set lines=40                " 40 lines of text instead of 24,
+  set guifont=Monaco:h16,Courier\ New\ Regular:h18
+  if has('gui_macvim')
+    set transparency=5          " Make the window slightly transparent
+  endif
+else
+  "set term=builtin_ansi       " Make arrow and other keys work
+  colorscheme railscasts " blackboard
+endif
+" }
+"
+"set tags
+set tags+=tags
+set tags+=~/.rvm/gems/tags
+map <Leader>rt :!ctags --extra=+f  --exclude=.git --exclude=log -R * `rvm gemdir`/gems/*<CR><CR>
+
+"set ESC map
+imap jj <Esc>
+
+"AutoComplPop config
+let g:acp_enableAtStartup = 1 "auto-popup is enabled at startup.
+let g:acp_mappingDriven = 0 "auto-popup is triggered by key mappings instead of |CursorMovedI| event
+"let g:acp_completeoptPreview = 1 "If non-zero, preview is added to 'completeopt' when auto-popup
+"let g:acp_behaviorRubyOmniSymbolLeength = 1 "Length of keyword characters before the cursor, which are needed to
+" attempt ruby omni-completion for symbols. If negative value, this
+"completion will be never attempted.
+
+"NerdTree Config
+nnoremap <leader>s :NERDTreeToggle<cr>
+autocmd vimenter * if !argc() | NERDTree | endif "Open nerdtree when no files specific"
+"When vim startup no files specific open a NERDTree automatically
+"autocmd StdinReadPre * let s:std_in=1
+"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+let NERDTreeChDirMode = 2
+let NERDTreeIgnore=['\.vim$', '\~$', '\.git', '.jpg', '.png', '.gif']
+let g:nerdtree_tabs_open_on_gui_startup = 0
+let NERDTreeWinSize = 30
+let NERDTreeQuitOnOpen = 1
+
+"snipMat
+let g:snipMate = {}
+let g:snipMate.scope_aliases = {}
+let g:snipMate.scope_aliases['ruby'] = 'ruby, rails'
+
+"Force Scc file to sass filetype
+autocmd BufNewFile,BufRead *.scss set ft=css
+
+"Ack Config  
+"Need to Install 'ack' into the system.
+let g:ack_autoclose = 1
