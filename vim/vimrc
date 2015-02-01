@@ -65,6 +65,8 @@ Bundle 'jiangmiao/auto-pairs'
 "{ TEST
 Bundle 'thoughtbot/vim-rspec'
 "}
+"
+Bundle 'bling/vim-airline'
 
 call vundle#end()  "required
 
